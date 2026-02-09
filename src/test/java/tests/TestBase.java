@@ -35,7 +35,6 @@ public class TestBase {
 //        Attach.screenshotAs("Last screenshot"); // todo fix
         Attach.pageSource();
         closeWebDriver();
-
         Attach.addVideo(sessionId);
     }
 }
