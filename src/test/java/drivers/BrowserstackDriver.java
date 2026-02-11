@@ -20,6 +20,12 @@ public class BrowserstackDriver implements WebDriverProvider {
 
         AndroidConfig config = ConfigProvider.getConfig();
 
+        /*До этого была конфигурация, как в лекции. Попробовал запросить помощи у гпт,
+        скопипастил драйвер, но результата не дало, ничего не заводится :(
+         */
+
+
+
         // W3C root capabilities
         MutableCapabilities caps = new MutableCapabilities();
         caps.setCapability("platformName", "Android");
