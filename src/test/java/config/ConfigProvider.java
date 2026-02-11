@@ -3,10 +3,11 @@ package config;
 import org.aeonbits.owner.ConfigFactory;
 
 public class ConfigProvider {
+    private static final AndroidConfig config =
+            ConfigFactory.create(AndroidConfig.class);
 
-    private ConfigProvider() {} //question Что тут происходит?
-
-    public static AndroidConfig getConfig() { //И тут
-            return ConfigFactory.create(AndroidConfig.class);
+    public static AndroidConfig getConfig() {
+        return config;
     }
 }
+

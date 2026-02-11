@@ -6,7 +6,6 @@ import config.ConfigProvider;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import javax.annotation.Nonnull;
@@ -14,33 +13,39 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class BrowserstackDriver implements WebDriverProvider {
+
     @Nonnull
     @Override
     public WebDriver createDriver(@Nonnull Capabilities capabilities) {
-        MutableCapabilities caps = new MutableCapabilities();
+
         AndroidConfig config = ConfigProvider.getConfig();
 
-        // Set your access credentials
-        caps.setCapability("browserstack.user", config.browserstackUser()); //todo fix ${browserstackUser}
-        caps.setCapability("browserstack.key", config.browserstackKey()); //todo fix ${browserstackKey}
+        // W3C root capabilities
+        MutableCapabilities caps = new MutableCapabilities();
+        caps.setCapability("platformName", "Android");
 
-        // Set URL of the application under test
-        caps.setCapability("app", config.app());
+        // Appium capability for the app (НЕ внутри bstack:options)
+        caps.setCapability("appium:app", config.app());
 
-        // Specify device and os_version for testing
-        caps.setCapability("device", config.deviceName());
-        caps.setCapability("os_version", config.osVersion());
+        // BrowserStack vendor namespace
+        MutableCapabilities bstackOptions = new MutableCapabilities();
+        bstackOptions.setCapability("userName", config.browserstackUser());
+        bstackOptions.setCapability("accessKey", config.browserstackKey());
 
-        // Set other BrowserStack capabilities
-        caps.setCapability("project", config.projectName());
-        caps.setCapability("build", config.buildName());
-        caps.setCapability("name", config.testName());
+        bstackOptions.setCapability("deviceName", config.deviceName());
+        bstackOptions.setCapability("osVersion", config.osVersion());
 
-        // Initialise the remote Webdriver using BrowserStack remote URL
-        // and desired capabilities defined above
+        bstackOptions.setCapability("projectName", config.projectName());
+        bstackOptions.setCapability("buildName", config.buildName());
+        bstackOptions.setCapability("sessionName", config.testName());
+
+        caps.setCapability("bstack:options", bstackOptions);
+
         try {
             return new RemoteWebDriver(
-                    new URL("https://hub.browserstack.com/wd/hub"), caps);
+                    new URL("https://hub.browserstack.com/wd/hub"),
+                    caps
+            );
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }

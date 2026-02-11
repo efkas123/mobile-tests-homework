@@ -3,7 +3,8 @@ package config;
 import org.aeonbits.owner.*;
 
 @Config.Sources({
-        "classpath:mobile.properties"
+        "classpath:mobile.properties",
+        "system:properties"
 })
 
 public interface AndroidConfig extends Config {
