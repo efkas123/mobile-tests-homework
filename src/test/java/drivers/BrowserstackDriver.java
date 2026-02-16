@@ -25,7 +25,6 @@ public class BrowserstackDriver implements WebDriverProvider {
          */
 
 
-
         // W3C root capabilities
         MutableCapabilities caps = new MutableCapabilities();
         caps.setCapability("platformName", "Android");
